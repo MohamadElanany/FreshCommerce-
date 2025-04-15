@@ -13,8 +13,10 @@ import CounterContextProvider from "./Context/counterContext"
 import UserContextProvider from './Context/UserContext';
 import ProtectedRoute from './components/protectedRoute/protectedRoute';
 import ProductDetails from './components/ProductDetails/ProductDetails';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 
+let query = new QueryClient()
 
 let x = createBrowserRouter([
   {path:"", element : <Layout />,
@@ -38,7 +40,9 @@ function App() {
     <>
       <UserContextProvider>
         <CounterContextProvider>
-          <RouterProvider router={x}></RouterProvider>
+          <QueryClientProvider client={query}>
+            <RouterProvider router={x}></RouterProvider>
+          </QueryClientProvider>
         </CounterContextProvider>
       </UserContextProvider>
     </>

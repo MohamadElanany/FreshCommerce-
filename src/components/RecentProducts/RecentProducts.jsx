@@ -1,29 +1,25 @@
 import React, { useEffect , useState } from 'react'
 import style from "./RecentProducts.module.css"
-import  axios  from 'axios';
 import { Link } from 'react-router-dom';
+import useProducts from './../../Hooks/useProducts';
+
 
 export default function RecentProducts() {
 
-  let [products , setProducts] = useState([]);
+  let {data, isError, isLoading, error} = useProducts()
 
-  function getProducts() {
-    axios.get('https://ecommerce.routemisr.com/api/v1/products')
-    .then((res) => {
-      setProducts(res.data.data)
-    })
-    .catch((res) => {
-      console.log(res)
-    })
+  if(isError){
+    return <h3>{error}</h3>
   }
-  useEffect(() => {
-    getProducts()
-    }, [])
+
+  if(isLoading){
+    return <div className="spinner"></div>
+  }
 
   return (
     <>
         <div className="row">
-          { products.length > 0 ?  products.map((product) => (
+          {data.map((product) => (
             <div key={product.id} className='w-1/6'>
               <div className="product my-2 p-2">
               <Link to={`/productdetails/${product.id}/${product.category.name}`}>
@@ -38,7 +34,7 @@ export default function RecentProducts() {
                 <button className='btn'>Add To Cart</button>
               </div>
             </div>
-          )) : <div className="spinner"></div>}
+          ))}
         </div>
     </>
   )
